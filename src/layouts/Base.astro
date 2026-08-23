@@ -11,8 +11,9 @@ interface Props {
   ogImage?: string;
   jsonLd?: Record<string, unknown>;
 }
-const { title, description, current, canonicalPath, ogImage = '/og-default.jpg', jsonLd } = Astro.props as Props;
+const { title, description, current, canonicalPath, ogImage = '/og-image.png', jsonLd } = Astro.props as Props;
 const canonicalURL = new URL(canonicalPath, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
 const fullTitle = title + ' — LongevityStack';
 ---
 <!DOCTYPE html>
@@ -29,10 +30,11 @@ const fullTitle = title + ' — LongevityStack';
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    <meta property="og:image" content={ogImageURL} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
 
     {jsonLd && (
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
