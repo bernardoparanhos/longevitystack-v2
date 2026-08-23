@@ -25,6 +25,11 @@ const jsonLd = {
   author: { '@type': 'Person', name: 'Bernardo Paranhos', affiliation: { '@type': 'CollegeOrUniversity', name: 'UTFPR' } },
   dateModified: lastReviewed ? lastReviewed.toISOString() : undefined,
 };
+
+// canonicalPath is '/compounds/{slug}/' — derive the content path from it
+// rather than hardcoding, so this stays correct if the pillar ever changes.
+const [contentFolder, slug] = canonicalPath.replace(/^\/|\/$/g, '').split('/');
+const githubPath = `src/content/${contentFolder}/${slug}.mdx`;
 ---
 <Base title={title} description={tagline} current="compounds" canonicalPath={canonicalPath} jsonLd={jsonLd}>
   <main class="ls-shell">
@@ -37,7 +42,7 @@ const jsonLd = {
       <p style="font-size: 18px; line-height: 1.55; max-width: 62ch; margin: 0 0 20px;" class="ls-muted">{tagline}</p>
       <div style="display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 13px; padding-bottom: 28px; border-bottom: 1px solid var(--color-divider);" class="ls-muted ls-tabular">
         <span>Bernardo Paranhos</span><span>·</span>
-        {lastReviewed ? <span style="color: var(--color-accent-700);">Last reviewed {lastReviewed.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</span> : <span>Review pending</span>}
+        {lastReviewed ? <span style="color: var(--color-accent-700);">Last reviewed {lastReviewed.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })}</span> : <span>Review pending</span>}
       </div>
     </div>
 
@@ -67,7 +72,7 @@ const jsonLd = {
         )}
       </article>
 
-      <EvidencePanel references={references} participants={participants} />
+      <EvidencePanel title={title} githubPath={githubPath} references={references} participants={participants} />
     </div>
   </main>
 </Base>

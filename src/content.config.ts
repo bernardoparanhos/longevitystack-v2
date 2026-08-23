@@ -9,6 +9,13 @@ const studyComposition = z.object({
   observational: z.number().default(0),
 });
 
+// One Q&A pair for the FAQPage JSON-LD — must match the FAQ section rendered
+// in the MDX body verbatim (schema has to match visible page content).
+const faqItem = z.object({
+  question: z.string(),
+  answer: z.string(),
+});
+
 // Understand + Protocols share the same evidence metadata shape.
 // lastReviewed/references/participants are optional because a page can be
 // scaffolded (draft: true) before it has been reviewed against real sources —
@@ -20,6 +27,7 @@ const reviewedArticle = {
   references: z.number().optional(),
   participants: z.number().optional(),
   studyComposition: studyComposition.optional(),
+  faq: z.array(faqItem).optional(),
   draft: z.boolean().default(false),
   slug: z.string().optional(),
 };

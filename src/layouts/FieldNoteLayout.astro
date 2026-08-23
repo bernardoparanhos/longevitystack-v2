@@ -18,7 +18,7 @@ const description = hypothesis || (title + ' — an N=1 field note.');
     <div style="padding: 64px 0 0; max-width: 900px;">
       <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
         <span class="ls-kicker">Field Note</span>
-        <span style="font-size: 13px; font-style: italic;" class="ls-muted">{date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+        <span style="font-size: 13px; font-style: italic;" class="ls-muted">{date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })}</span>
       </div>
       <h1 style="font-family: var(--font-heading); font-weight: 600; font-size: 44px; line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 28px;">{title}</h1>
     </div>

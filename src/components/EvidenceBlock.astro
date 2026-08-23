@@ -35,14 +35,16 @@ function tone(step: number) {
     </div>
   </div>
   <p style="margin: 0 0 18px; font-size: 18px; line-height: 1.55;"><strong>{claim}</strong></p>
-  <table class="table" style="margin-bottom: 14px;">
-    <thead>
-      <tr><th>Study type</th><th>Sample</th><th>Population</th><th>Funding</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>{studyType}</td><td class="ls-tabular">{sampleSize}</td><td>{population}</td><td>{funding}</td></tr>
-    </tbody>
-  </table>
+  <div class="ls-table-wrap" style="margin-bottom: 14px;">
+    <table class="table">
+      <thead>
+        <tr><th>Study type</th><th>Sample</th><th>Population</th><th>Funding</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>{studyType}</td><td class="ls-tabular">{sampleSize}</td><td>{population}</td><td>{funding}</td></tr>
+      </tbody>
+    </table>
+  </div>
   <p style="margin: 0; font-size: 16px; line-height: 1.55;" class="ls-muted">
     <span style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-right: 8px;">Result</span>
     {result} <a href={citationHref}>{citationLabel}</a>

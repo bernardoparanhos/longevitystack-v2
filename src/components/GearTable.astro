@@ -3,19 +3,21 @@ interface Row { name: string; href: string; bestFor: string; price?: number; ver
 interface Props { rows: Row[]; }
 const { rows } = Astro.props as Props;
 ---
-<table class="table">
-  <thead>
-    <tr><th style="width: 30%;">Device</th><th>Best for</th><th style="width: 16%;">Price</th><th style="width: 14%;">Verdict</th></tr>
-  </thead>
-  <tbody>
-    {rows.map((r) => (
-      <tr>
-        <td><a href={r.href} style="text-decoration: none;">{r.name}</a></td>
-        <td>{r.bestFor}</td>
-        <td class="ls-tabular">{r.price !== undefined ? '$' + r.price.toLocaleString('en-US') : '—'}</td>
-        <td>{r.verdict ? <span class="tag tag-accent ls-tabular">{r.verdict}</span> : <span class="tag tag-outline">Pending</span>}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<div class="ls-table-wrap">
+  <table class="table">
+    <thead>
+      <tr><th style="width: 30%;">Device</th><th>Best for</th><th style="width: 16%;">Price</th><th style="width: 14%;">Verdict</th></tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr>
+          <td><a href={r.href} style="text-decoration: none;">{r.name}</a></td>
+          <td>{r.bestFor}</td>
+          <td class="ls-tabular">{r.price !== undefined ? '$' + r.price.toLocaleString('en-US') : '—'}</td>
+          <td>{r.verdict ? <span class="tag tag-accent ls-tabular">{r.verdict}</span> : <span class="tag tag-outline">Pending</span>}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
 <p style="font-size: 13px; margin: 14px 0 0;" class="ls-muted">Affiliate links. Devices bought at retail; no manufacturer has review or approval rights.</p>

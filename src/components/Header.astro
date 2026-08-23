@@ -15,14 +15,41 @@ const links = [
       <div style="font-size: 21px; font-weight: 600; letter-spacing: 0.02em; line-height: 1;">LONGEVITYSTACK</div>
       <div class="ls-muted" style="font-size: 13px; font-style: italic; margin-top: 5px; line-height: 1;">the engineering of sleep</div>
     </a>
-    <nav style="display: flex; align-items: center; gap: 26px; padding-bottom: 2px;">
+    <button class="ls-menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="ls-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="ls-nav" class="ls-nav">
       {links.map((l) => (
         <a href={l.href} aria-current={current === l.key ? 'page' : undefined}
-           style={"font-size: 15px; text-decoration: none; padding-bottom: 4px; color: " + (current === l.key ? 'var(--color-accent-700)' : 'var(--color-text)')}>
+           style={"color: " + (current === l.key ? 'var(--color-accent-700)' : 'var(--color-text)')}>
           {l.label}
         </a>
       ))}
-      <a href="/#subscribe" class="btn btn-primary" style="font-size: 14px; padding: 8px 16px; text-decoration: none;">Subscribe</a>
+      <a href="/#subscribe" class="btn btn-primary" style="text-decoration: none;">Subscribe</a>
     </nav>
   </div>
 </header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.ls-menu-toggle');
+  const nav = document.querySelector<HTMLElement>('.ls-nav');
+
+  if (toggle && nav) {
+    const close = () => {
+      nav.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    };
+
+    toggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', close));
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as Node;
+      if (!nav.contains(target) && !toggle.contains(target)) close();
+    });
+  }
+</script>

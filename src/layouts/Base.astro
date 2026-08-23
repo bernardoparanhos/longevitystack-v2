@@ -10,11 +10,25 @@ interface Props {
   canonicalPath: string;
   ogImage?: string;
   jsonLd?: Record<string, unknown>;
+  faqJsonLd?: Record<string, unknown>;
 }
-const { title, description, current, canonicalPath, ogImage = '/og-image.png', jsonLd } = Astro.props as Props;
+const { title, description, current, canonicalPath, ogImage = '/og-image.png', jsonLd, faqJsonLd } = Astro.props as Props;
 const canonicalURL = new URL(canonicalPath, Astro.site);
 const ogImageURL = new URL(ogImage, Astro.site);
 const fullTitle = title + ' — LongevityStack';
+
+// Person schema for the author — site-wide identity, rendered on every page
+// per SEO-STANDARD.md ("Autor (todas as páginas): Person / ProfilePage").
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Bernardo Paranhos',
+  affiliation: {
+    '@type': 'EducationalOrganization',
+    name: 'Federal University of Technology — Paraná (UTFPR)',
+  },
+  url: 'https://longevitystack.org/about',
+};
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -39,6 +53,10 @@ const fullTitle = title + ' — LongevityStack';
     {jsonLd && (
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     )}
+    {faqJsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+    )}
+    <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
   </head>
   <body style="margin: 0;">
     <Header current={current} />

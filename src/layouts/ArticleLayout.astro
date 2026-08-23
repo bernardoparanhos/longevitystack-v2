@@ -6,6 +6,7 @@ import EvidencePanel from '../components/EvidencePanel.astro';
 
 interface Heading { slug: string; text: string; }
 interface Composition { metaAnalyses: number; rcts: number; crossover: number; observational: number; }
+interface FaqItem { question: string; answer: string; }
 interface Props {
   title: string;
   description: string;
@@ -16,12 +17,13 @@ interface Props {
   references?: number;
   participants?: number;
   studyComposition?: Composition;
+  faq?: FaqItem[];
   headings: Heading[];
   readingTime?: string;
 }
 const {
   title, description, pillar, current, canonicalPath,
-  lastReviewed, references, participants, studyComposition, headings, readingTime,
+  lastReviewed, references, participants, studyComposition, faq, headings, readingTime,
 } = Astro.props as Props;
 
 const jsonLd = {
@@ -32,8 +34,27 @@ const jsonLd = {
   author: { '@type': 'Person', name: 'Bernardo Paranhos', affiliation: { '@type': 'CollegeOrUniversity', name: 'UTFPR' } },
   dateModified: lastReviewed ? lastReviewed.toISOString() : undefined,
 };
+
+// FAQPage schema — only emitted when the article actually declares FAQ
+// entries in frontmatter (must mirror the FAQ section rendered in the body,
+// plaintext only — no HTML in question/answer text).
+const faqJsonLd = faq && faq.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+} : undefined;
+
+// canonicalPath is '/understand/{slug}/' or '/protocols/{slug}/' — derive the
+// real content-collection folder from it instead of hardcoding one, since
+// this layout is shared by both pillars.
+const [contentFolder, slug] = canonicalPath.replace(/^\/|\/$/g, '').split('/');
+const githubPath = `src/content/${contentFolder}/${slug}.mdx`;
 ---
-<Base title={title} description={description} current={current === 'Protocol' ? 'protocols' : 'understand'} canonicalPath={canonicalPath} jsonLd={jsonLd}>
+<Base title={title} description={description} current={current === 'Protocol' ? 'protocols' : 'understand'} canonicalPath={canonicalPath} jsonLd={jsonLd} faqJsonLd={faqJsonLd}>
   <main class="ls-shell">
     <div style="padding: 64px 0 0; max-width: 900px;">
       <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
@@ -45,7 +66,7 @@ const jsonLd = {
       <div style="display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 13px; padding-bottom: 28px; border-bottom: 1px solid var(--color-divider);" class="ls-muted ls-tabular">
         <span>Bernardo Paranhos</span>
         <span>·</span>
-        {lastReviewed ? <span style="color: var(--color-accent-700);">Last reviewed {lastReviewed.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</span> : <span>Review pending</span>}
+        {lastReviewed ? <span style="color: var(--color-accent-700);">Last reviewed {lastReviewed.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })}</span> : <span>Review pending</span>}
         {readingTime && <><span>·</span><span>{readingTime}</span></>}
         {references !== undefined && <><span>·</span><span>{references} references{participants !== undefined ? ' · ' + participants.toLocaleString('en-US') + ' participants' : ''}</span></>}
       </div>
@@ -63,7 +84,65 @@ const jsonLd = {
         <slot />
       </article>
 
-      <EvidencePanel references={references} participants={participants} composition={studyComposition} />
+      <EvidencePanel title={title} githubPath={githubPath} references={references} participants={participants} composition={studyComposition} />
     </div>
   </main>
 </Base>
+
+<script>
+  // Highlights the TOC entry for the section currently in view.
+  // Sets aria-current="true" on the matching .ls-toc link; the active-state
+  // color and left-border marker are pure CSS (.ls-toc a[aria-current="true"]).
+  const headings = document.querySelectorAll<HTMLElement>('.ls-article h2[id]');
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.ls-toc a');
+
+  if (headings.length && tocLinks.length) {
+    const linkByHeadingId = new Map<string, HTMLAnchorElement>();
+    tocLinks.forEach((link) => {
+      const href = link.getAttribute('href');
+      if (href?.startsWith('#')) linkByHeadingId.set(href.slice(1), link);
+    });
+
+    const setActive = (id: string) => {
+      const link = linkByHeadingId.get(id);
+      if (!link) return;
+      tocLinks.forEach((l) => l.removeAttribute('aria-current'));
+      link.setAttribute('aria-current', 'true');
+    };
+
+    // Clicking a TOC link jumps straight to the section — mark it active
+    // immediately instead of waiting for the observer to catch up once the
+    // jump lands (that gap read as the marker being "stuck" until the next
+    // manual scroll). rootMargin below is briefly ignored right after a
+    // click so the observer doesn't fight the click while the jump settles.
+    let suppressObserverUntil = 0;
+    tocLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        const href = link.getAttribute('href');
+        if (href?.startsWith('#')) {
+          setActive(href.slice(1));
+          suppressObserverUntil = Date.now() + 600;
+        }
+      });
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (Date.now() < suppressObserverUntil) return;
+        // Among headings currently intersecting the tracking band, pick the
+        // one closest to the top — matches natural reading position.
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          setActive(visible[0].target.id);
+        }
+      },
+      // -116px matches the sticky header clearance used sitewide (.ls-sidebar,
+      // .ls-evidence-panel, and h2 scroll-margin-top in global.css) so a
+      // clicked heading lands inside this band, not just above it.
+      { rootMargin: '-116px 0px -70% 0px', threshold: 0 }
+    );
+
+    headings.forEach((h) => observer.observe(h));
+  }
+</script>

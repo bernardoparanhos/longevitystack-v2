@@ -1,13 +1,17 @@
 ---
 interface Composition { metaAnalyses: number; rcts: number; crossover: number; observational: number; }
 interface Props {
+  title: string;
+  githubPath: string;
   references?: number;
   participants?: number;
   composition?: Composition;
 }
-const { references, participants, composition } = Astro.props as Props;
+const { title, githubPath, references, participants, composition } = Astro.props as Props;
 const total = composition ? composition.metaAnalyses + composition.rcts + composition.crossover + composition.observational : 0;
 function pct(n: number) { return total > 0 ? (n / total) * 100 : 0; }
+const reportErrorHref = `mailto:beparanhosborges@gmail.com?subject=${encodeURIComponent('Error in article: ' + title)}`;
+const revisionHistoryHref = `https://github.com/bernardoparanhos/longevitystack-v2/commits/main/${githubPath}`;
 ---
 <aside class="ls-evidence-panel">
   <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 18px;" class="ls-muted">Evidence summary</div>
@@ -38,9 +42,10 @@ function pct(n: number) { return total > 0 ? (n / total) * 100 : 0; }
       </div>
     </>
   )}
-  <div style="border-top: 1px solid var(--color-divider); padding-top: 16px; margin-top: 26px; display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
-    <a href="#">Cite this page</a>
-    <a href="#">Report an error</a>
-    <a href="#">Revision history</a>
+  <div style="margin-top: 26px; display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+    <!-- TODO: implementar modal de citação -->
+    <a href="#" data-action="cite">Cite this page</a>
+    <a href={reportErrorHref}>Report an error</a>
+    <a href={revisionHistoryHref} target="_blank" rel="noopener noreferrer">Revision history</a>
   </div>
 </aside>
