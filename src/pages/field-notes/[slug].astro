@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from 'astro:content';
+import FieldNoteLayout from '../../layouts/FieldNoteLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('field-notes');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<FieldNoteLayout
+  title={entry.data.title}
+  date={entry.data.date}
+  canonicalPath={'/field-notes/' + entry.id + '/'}
+  hypothesis={entry.data.hypothesis}
+  method={entry.data.method}
+  conclusion={entry.data.conclusion}
+  dataAvailable={entry.data.dataAvailable}
+>
+  <Content />
+</FieldNoteLayout>

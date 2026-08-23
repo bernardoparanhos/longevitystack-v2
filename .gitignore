@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.astro/
+.wrangler/
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# editor/OS
+.DS_Store
+
+# internal docs — never ships to production
+_docs/
+_docs/project-context/

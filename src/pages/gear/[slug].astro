@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('gear');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const priceLabel = d.price !== undefined ? '$' + d.price.toLocaleString('en-US') : undefined;
+---
+<Base title={d.title} description={d.tagline} current="gear" canonicalPath={'/gear/' + entry.id + '/'}>
+  <main class="ls-shell">
+    <div style="padding: 64px 0 0; max-width: 900px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+        <span class="ls-kicker" style="color: var(--color-accent-2-700);">Gear</span>
+        <span style="width: 120px; height: 3px; background: linear-gradient(90deg, var(--color-accent-700), var(--color-accent-2-500));"></span>
+      </div>
+      <h1 style="font-family: var(--font-heading); font-weight: 600; font-size: 52px; line-height: 1.06; letter-spacing: -0.015em; margin: 0 0 16px;">{d.title}</h1>
+      <p style="font-size: 18px; line-height: 1.55; max-width: 62ch; margin: 0 0 20px;" class="ls-muted">{d.tagline}</p>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 64px; align-items: start; padding: 44px 0 96px;">
+      <div class="ls-article" style="max-width: 68ch;">
+        <Content />
+      </div>
+      <aside class="ls-sidebar" style="border: 1px solid var(--color-text); padding: 24px;">
+        <div class="ls-product-plate" style="aspect-ratio: 4 / 3; margin-bottom: 20px;">Product plate</div>
+        <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px;" class="ls-muted">Verdict</div>
+        {d.verdict ? (
+          <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px;">
+            <span style="font-family: var(--font-heading); font-size: 46px; font-weight: 600; line-height: 1;" class="ls-tabular">{d.verdict}</span>
+          </div>
+        ) : (
+          <div class="ls-pending" style="margin-bottom: 20px;">Not yet reviewed</div>
+        )}
+        {priceLabel && <p style="font-size: 15px; margin: 0 0 16px;" class="ls-tabular">{priceLabel}</p>}
+        {d.affiliateUrl && <a href={d.affiliateUrl} class="btn btn-primary btn-block" style="text-decoration: none;">Check current price</a>}
+        <p style="font-size: 13px; line-height: 1.45; margin: 12px 0 0;" class="ls-muted">Affiliate link. I earn a commission if you buy; it does not change the price or the verdict above.</p>
+      </aside>
+    </div>
+  </main>
+</Base>

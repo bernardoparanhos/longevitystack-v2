@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+const entries = await getCollection('protocols');
+---
+<Base title="Protocols" description="Ordered steps, no product, no affiliate. What to do and when, derived directly from the mechanism." current="protocols" canonicalPath="/protocols/">
+  <main class="ls-shell">
+    <div style="padding: 64px 0 48px; max-width: 800px; border-bottom: 1px solid var(--color-divider);">
+      <div class="ls-kicker" style="margin-bottom: 20px;">Pillar · Protocols</div>
+      <h1 style="font-family: var(--font-heading); font-weight: 600; font-size: 52px; line-height: 1.08; letter-spacing: -0.015em; margin: 0 0 20px;">Protocols</h1>
+      <p style="font-size: 19px; line-height: 1.6; margin: 0;" class="ls-muted">Ordered steps, no product, no affiliate. What to do and when, derived directly from the mechanism.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 56px 0 96px;">
+      {entries.map((e) => (
+        <a href={'/protocols/' + e.id + '/'} style={"text-decoration: none; color: inherit; border-top: 2px solid " + (e.data.draft ? 'var(--color-divider)' : 'var(--color-text)') + "; padding-top: 18px; display: block;"}>
+          <div style={"font-family: var(--font-heading); font-size: 24px; font-weight: 600; line-height: 1.2; margin-bottom: 10px;" + (e.data.draft ? ' color: color-mix(in srgb, var(--color-text) 70%, transparent);' : '')}>{e.data.title}</div>
+          <p style="margin: 0 0 16px; font-size: 16px; line-height: 1.55;" class="ls-muted">{e.data.description}</p>
+          {e.data.draft ? <span class="tag tag-outline" style="font-size: 11px;">Coming</span> : <div style="font-size: 13px;" class="ls-muted ls-tabular">{e.data.references} references · reviewed {e.data.lastReviewed?.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</div>}
+        </a>
+      ))}
+    </div>
+  </main>
+</Base>

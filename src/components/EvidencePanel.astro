@@ -1,0 +1,46 @@
+---
+interface Composition { metaAnalyses: number; rcts: number; crossover: number; observational: number; }
+interface Props {
+  references?: number;
+  participants?: number;
+  composition?: Composition;
+}
+const { references, participants, composition } = Astro.props as Props;
+const total = composition ? composition.metaAnalyses + composition.rcts + composition.crossover + composition.observational : 0;
+function pct(n: number) { return total > 0 ? (n / total) * 100 : 0; }
+---
+<aside class="ls-evidence-panel">
+  <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 18px;" class="ls-muted">Evidence summary</div>
+  {(references !== undefined || participants !== undefined) && (
+    <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px;">
+      {references !== undefined && (
+        <div class="ls-stat-row"><span style="font-size: 14px;" class="ls-muted">References</span><span class="ls-stat-num">{references}</span></div>
+      )}
+      {participants !== undefined && (
+        <div class="ls-stat-row"><span style="font-size: 14px;" class="ls-muted">Participants</span><span class="ls-stat-num">{participants.toLocaleString('en-US')}</span></div>
+      )}
+    </div>
+  )}
+  {composition && total > 0 && (
+    <>
+      <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px;" class="ls-muted">Composition</div>
+      <div class="ls-composition-bar">
+        <span style={"flex: " + composition.metaAnalyses + "; background: var(--color-accent-800);"}></span>
+        <span style={"flex: " + composition.rcts + "; background: var(--color-accent-600);"}></span>
+        <span style={"flex: " + composition.crossover + "; background: var(--color-accent-400);"}></span>
+        <span style={"flex: " + composition.observational + "; background: var(--color-neutral-400);"}></span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;" class="ls-tabular">
+        <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; background: var(--color-accent-800); display: inline-block;"></span>{composition.metaAnalyses} meta-analyses</span>
+        <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; background: var(--color-accent-600); display: inline-block;"></span>{composition.rcts} randomised trials</span>
+        <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; background: var(--color-accent-400); display: inline-block;"></span>{composition.crossover} crossover studies</span>
+        <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; background: var(--color-neutral-400); display: inline-block;"></span>{composition.observational} observational</span>
+      </div>
+    </>
+  )}
+  <div style="border-top: 1px solid var(--color-divider); padding-top: 16px; margin-top: 26px; display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+    <a href="#">Cite this page</a>
+    <a href="#">Report an error</a>
+    <a href="#">Revision history</a>
+  </div>
+</aside>

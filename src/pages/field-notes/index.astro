@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+const entries = (await getCollection('field-notes')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base title="Field Notes" description="N=1 experiments run in my own bedroom. One a month, raw data included." current="field-notes" canonicalPath="/field-notes/">
+  <main class="ls-shell">
+    <div style="padding: 64px 0 48px; max-width: 800px; border-bottom: 1px solid var(--color-divider);">
+      <div class="ls-kicker" style="margin-bottom: 20px;">Field Notes</div>
+      <h1 style="font-family: var(--font-heading); font-weight: 600; font-size: 52px; line-height: 1.08; letter-spacing: -0.015em; margin: 0 0 20px;">Field Notes</h1>
+      <p style="font-size: 19px; line-height: 1.6; margin: 0;" class="ls-muted">N=1 experiments run in my own bedroom. One a month, raw data included — what worked, what didn't, and what the sample size can't tell you.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 56px 0 96px;">
+      {entries.map((e) => (
+        <a href={'/field-notes/' + e.id + '/'} style="text-decoration: none; color: inherit; border-top: 2px solid var(--color-divider); padding-top: 18px; display: block;">
+          <div style="font-family: var(--font-heading); font-size: 22px; font-weight: 600; line-height: 1.2; margin-bottom: 10px;" class="ls-muted">{e.data.title}</div>
+          <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.5;" class="ls-muted">{e.data.hypothesis || 'Hypothesis, method and raw data slot.'}</p>
+          <span class="tag tag-outline" style="font-size: 11px;">{e.data.dataAvailable ? 'Data logged' : 'Template — no data yet'}</span>
+        </a>
+      ))}
+    </div>
+  </main>
+</Base>

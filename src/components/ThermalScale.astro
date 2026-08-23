@@ -1,0 +1,21 @@
+---
+// A colored ambient-temperature scale. Pass explicit bands or use the
+// default six-band sleep-temperature scale used across the site.
+interface Band { color: string; lowC: number; highC: number; }
+interface Props { bands?: Band[]; minLabel?: string; maxLabel?: string; }
+const defaultBands: Band[] = [
+  { color: 'var(--color-accent-900)', lowC: 0, highC: 16 },
+  { color: 'var(--color-accent-700)', lowC: 16, highC: 18 },
+  { color: 'var(--color-accent-400)', lowC: 18, highC: 19 },
+  { color: 'var(--color-neutral-400)', lowC: 19, highC: 22 },
+  { color: 'var(--color-accent-2-500)', lowC: 22, highC: 24 },
+  { color: 'var(--color-accent-2-700)', lowC: 24, highC: 30 },
+];
+const { bands = defaultBands, minLabel = '14 °C', maxLabel = '26 °C' } = Astro.props as Props;
+---
+<div class="ls-thermal-scale">
+  {bands.map((b) => <span style={"background: " + b.color + ";"}></span>)}
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 12px;" class="ls-muted ls-tabular">
+  <span>{minLabel}</span><span>{maxLabel}</span>
+</div>

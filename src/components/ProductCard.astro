@@ -1,0 +1,37 @@
+---
+interface Spec { label: string; value: string; }
+interface Props {
+  kicker?: string;
+  name: string;
+  description: string;
+  specs?: Spec[];
+  ctaHref: string;
+  ctaLabel?: string;
+  disclosure?: string;
+}
+const {
+  kicker = 'Primary hardware recommendation',
+  name, description, specs = [],
+  ctaHref, ctaLabel = 'Read the full teardown',
+  disclosure = 'Affiliate link. I earn a commission if you buy; it does not change the price shown.',
+} = Astro.props as Props;
+---
+<div class="ls-product-card">
+  <div class="ls-product-plate">Product<br/>plate</div>
+  <div>
+    <div class="ls-kicker" style="margin-bottom: 8px;">{kicker}</div>
+    <div style="font-family: var(--font-heading); font-size: 24px; font-weight: 600; line-height: 1.15; margin-bottom: 10px;">{name}</div>
+    <p style="margin: 0 0 16px; font-size: 16px; line-height: 1.55;">{description}</p>
+    {specs.length > 0 && (
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 14px 0; border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); margin-bottom: 16px; font-size: 15px;" class="ls-tabular">
+        {specs.map((s) => (
+          <span><span style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; display: block; margin-bottom: 3px;" class="ls-muted">{s.label}</span>{s.value}</span>
+        ))}
+      </div>
+    )}
+    <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+      <a href={ctaHref} class="btn btn-primary" style="text-decoration: none;">{ctaLabel}</a>
+      <span style="font-size: 13px; max-width: 30ch; line-height: 1.4;" class="ls-muted">{disclosure}</span>
+    </div>
+  </div>
+</div>

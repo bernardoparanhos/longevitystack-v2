@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/session-start.cjs",
+            "timeout": 15,
+            "statusMessage": "Loading _docs/PROJECT.md"
+          }
+        ]
+      }
+    ]
+  }
+}

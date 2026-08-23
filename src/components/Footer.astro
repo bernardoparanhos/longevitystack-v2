@@ -1,0 +1,44 @@
+---
+const today = new Date().toISOString().slice(0, 10);
+---
+<footer class="ls-footer">
+  <div class="ls-shell">
+    <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 44px; border-bottom: 1px solid color-mix(in srgb, var(--color-bg) 22%, transparent);">
+      <div>
+        <div style="font-size: 19px; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 6px;">LONGEVITYSTACK</div>
+        <div style="font-size: 14px; font-style: italic; opacity: 0.65; margin-bottom: 18px;">the engineering of sleep</div>
+        <p style="font-size: 14px; line-height: 1.6; opacity: 0.75; margin: 0; max-width: 34ch;">Thermal regulation, sleep architecture, and the hardware that controls them. Written by Bernardo Paranhos, production engineer, UTFPR.</p>
+      </div>
+      <div>
+        <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.55; margin-bottom: 16px;">Protocols</div>
+        <div style="display: flex; flex-direction: column; gap: 9px; font-size: 15px;">
+          <a href="/protocols/sleep-temperature/">Sleep temperature</a>
+          <span style="opacity: 0.55;">Unrefreshing sleep — coming soon</span>
+          <span style="opacity: 0.55;">Sleep onset latency — coming soon</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.55; margin-bottom: 16px;">Compounds &amp; gear</div>
+        <div style="display: flex; flex-direction: column; gap: 9px; font-size: 15px;">
+          <a href="/compounds/magnesium/">Magnesium</a>
+          <a href="/compounds/glycine/">Glycine</a>
+          <a href="/compounds/caffeine/">Caffeine</a>
+          <a href="/gear/">All hardware</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.55; margin-bottom: 16px;">The site</div>
+        <div style="display: flex; flex-direction: column; gap: 9px; font-size: 15px;">
+          <a href="/methodology/">Methodology</a>
+          <a href="/about/">About</a>
+          <a href="/affiliate-disclosure/">Affiliate disclosure</a>
+          <a href="/medical-disclaimer/">Medical disclaimer</a>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; gap: 40px; padding-top: 24px; flex-wrap: wrap;">
+      <p style="font-size: 13px; line-height: 1.6; opacity: 0.6; margin: 0; max-width: 82ch;">Informational only, based on peer-reviewed clinical research. Not medical advice. The author is a production engineer, not a physician — always consult a qualified healthcare professional. This site earns affiliate commissions on some links; disclosure appears beside every one of them.</p>
+      <div style="font-size: 13px; opacity: 0.6; font-variant-numeric: tabular-nums; white-space: nowrap;">© {new Date().getFullYear()} · built {today}</div>
+    </div>
+  </div>
+</footer>

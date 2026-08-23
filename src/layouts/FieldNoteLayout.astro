@@ -1,0 +1,33 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  date: Date;
+  canonicalPath: string;
+  hypothesis?: string;
+  method?: string;
+  conclusion?: string;
+  dataAvailable: boolean;
+}
+const { title, date, canonicalPath, hypothesis, method, conclusion, dataAvailable } = Astro.props as Props;
+const description = hypothesis || (title + ' — an N=1 field note.');
+---
+<Base title={title} description={description} current="field-notes" canonicalPath={canonicalPath}>
+  <main class="ls-shell">
+    <div style="padding: 64px 0 0; max-width: 900px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+        <span class="ls-kicker">Field Note</span>
+        <span style="font-size: 13px; font-style: italic;" class="ls-muted">{date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+      </div>
+      <h1 style="font-family: var(--font-heading); font-weight: 600; font-size: 44px; line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 28px;">{title}</h1>
+    </div>
+    <article class="ls-article" style="padding: 8px 0 96px;">
+      {hypothesis && (<><h2>Hypothesis</h2><p>{hypothesis}</p></>)}
+      {method && (<><h2>Method</h2><p>{method}</p></>)}
+      <h2>Raw data</h2>
+      {dataAvailable ? <slot /> : <div class="ls-pending">Raw data pending — do not publish until logged.</div>}
+      {conclusion && (<><h2>Conclusion</h2><p>{conclusion}</p></>)}
+    </article>
+  </main>
+</Base>

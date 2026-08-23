@@ -1,0 +1,5 @@
+---
+interface Props { label?: string; }
+const { label = 'Content pending' } = Astro.props as Props;
+---
+<div class="ls-pending">{label} — do not publish until reviewed against primary sources.</div>

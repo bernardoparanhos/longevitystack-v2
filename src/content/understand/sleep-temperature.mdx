@@ -1,0 +1,111 @@
+---
+title: "Sleep temperature"
+description: "Thermal regulation is the rate-limiting step of sleep onset. This document covers the ambient range, the physiology that makes it the constraint, and what follows from it."
+lastReviewed: 2026-06-14
+references: 12
+participants: 6411
+studyComposition:
+  metaAnalyses: 2
+  rcts: 4
+  crossover: 3
+  observational: 3
+---
+import EvidenceBlock from '../../components/EvidenceBlock.astro';
+import ThermalScale from '../../components/ThermalScale.astro';
+
+<div class="ls-direct-answer">
+  <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px;" class="ls-muted">Direct answer</div>
+  <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 14px;">
+    <span style="font-family: var(--font-heading); font-size: 46px; font-weight: 600; line-height: 1; letter-spacing: -0.02em;" class="ls-tabular">18–19 °C</span>
+    <span style="font-size: 17px;" class="ls-muted ls-tabular">64–66 °F ambient</span>
+  </div>
+  <p style="margin: 0; font-size: 18px; line-height: 1.6;">Set the room to <strong>18–19 °C</strong> and keep the hands and feet uncovered but warm. The number matters less than the gradient it produces: the body has to shed roughly <strong>0.5–1 °C</strong> of core temperature to enter deep sleep, and it does that through the skin of the extremities.</p>
+</div>
+
+## Mechanism
+
+Sleep onset is not triggered by darkness or by fatigue alone. It is gated by a measurable drop in core body temperature, and that drop is a heat-transfer problem before it is a neurological one.
+
+The body dumps heat through **arteriovenous anastomoses** — direct shunts between arteries and veins concentrated in the palms, soles and face. When they open, warm blood bypasses the capillary bed and flows straight to the surface, where it radiates. Core temperature falls. Sleep pressure converts into sleep.
+
+This produces the finding that confuses most people: **warm feet make you fall asleep faster in a cold room**. Warming the extremities opens the shunts. Cooling the room gives the released heat somewhere to go.
+
+<div class="ls-key-insight">
+  <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px; color: var(--color-accent-800);">Key insight</div>
+  <p style="margin: 0; font-size: 17px; line-height: 1.55;">The variable you control is not temperature. It is the <em>gradient</em> between a warm skin surface and a cool room.</p>
+</div>
+
+## The evidence
+
+<EvidenceBlock
+  number="01"
+  claim="A warm bath 1–2 hours before bed shortens sleep onset latency."
+  studyType="Meta-analysis"
+  sampleSize="n = 5,322 · 13 trials"
+  population="Healthy adults"
+  funding="Public · none declared"
+  result="Mean reduction in sleep onset latency of −8.6 min when bathing at 40–42.5 °C, 1–2 h before bed. Effect disappears when the bath is taken immediately before lying down."
+  citationHref="#ref-1"
+  citationLabel="[1]"
+  strength={4}
+/>
+
+<EvidenceBlock
+  number="02"
+  claim="Raising skin temperature by a fraction of a degree deepens slow-wave sleep in older adults."
+  studyType="Randomised crossover"
+  sampleSize="n = 24"
+  population="Adults 60+, incl. insomnia"
+  funding="Academic institute"
+  result="A skin-temperature rise of 0.4 °C — too small to be felt — increased slow-wave sleep and suppressed nocturnal wakefulness. Small sample; single laboratory."
+  citationHref="#ref-2"
+  citationLabel="[2]"
+  strength={3}
+/>
+
+## The thermal bands
+
+Ambient temperature is not a preference. Each band produces a different, measurable outcome in sleep architecture.
+
+<ThermalScale />
+
+| Ambient band | Thermoregulatory state | Effect on sleep architecture |
+| --- | --- | --- |
+| < 16 °C · < 61 °F | Vasoconstriction | Heat loss blocked. Onset delayed, more awakenings. |
+| 16–18 °C · 61–64 °F | Cool, compensable | Works with warm extremities. Cold feet cancel the benefit. |
+| **18–19 °C · 64–66 °F** | **Optimal gradient** | **Fastest onset, longest slow-wave duration.** |
+| 19–22 °C · 66–72 °F | Neutral | Tolerable. Core drop is slower; deep sleep shortens. |
+| 22–24 °C · 72–75 °F | Warm load | REM fragments first. Measurable before it is felt. |
+| > 24 °C · > 75 °F | Thermal stress | Sweating, arousals, both deep and REM suppressed. |
+
+Measured at mattress height, not at the thermostat — the difference is routinely 1–3 °C. The unit I keep beside the bed is [a cheap logging thermometer](/gear/logging-thermometer/); any hygrometer with a memory function does the job. <span class="ls-muted">(Affiliate link — I earn a commission at no cost to you.)</span>
+
+## What we don't know
+
+<div class="ls-dont-know">
+  <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px;" class="ls-muted">What we don't know</div>
+  <ul style="margin: 0; padding-left: 20px; font-size: 17px; line-height: 1.6;">
+    <li>Whether 18 °C is optimal for everyone or an average that hides real variance by body composition, age and menopausal status. Almost certainly the latter.</li>
+    <li>Whether dynamic surface cooling outperforms a well-set static room, or only compensates for a badly set one. No independent trial has compared them directly.</li>
+    <li>Long-term effects. Every trial cited here is nights-to-weeks. Nobody has run a thermal sleep protocol for a year and measured anything.</li>
+  </ul>
+</div>
+
+## FAQ
+
+**Is 18 °C too cold if I sleep alone under a thin duvet?**
+Then the bedding is the variable, not the room. Insulation and ambient temperature trade against each other; hold the room and adjust the tog.
+
+**Does a fan help, or is it just noise?**
+Both, and both help. Air movement raises evaporative loss at the skin, which is a real thermal effect independent of the masking noise.
+
+**My partner needs it warmer. What actually works?**
+Separate duvets first — it is free and resolves most cases. Dual-zone surface cooling (see [Eight Sleep Pod 4](/gear/eight-sleep-pod-4/)) only if that fails.
+
+## References
+
+<div id="ref-1" />1. Haghayegh S, et al. Before-bedtime passive body heating and sleep quality: a systematic review and meta-analysis. *Sleep Medicine Reviews*, 2019. PMID 31102877
+
+<div id="ref-2" />2. Raymann RJEM, Swaab DF, Van Someren EJW. Skin deep: enhanced sleep depth by cutaneous temperature manipulation. *Brain*, 2008. PMID 18192289
+
+3. Okamoto-Mizuno K, Mizuno K. Effects of thermal environment on sleep and circadian rhythm. *J Physiol Anthropol*, 2012. PMID 22738673

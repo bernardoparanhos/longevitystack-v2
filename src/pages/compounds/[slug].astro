@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from 'astro:content';
+import CompoundLayout from '../../layouts/CompoundLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('compounds');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+<CompoundLayout
+  title={entry.data.title}
+  tagline={entry.data.tagline}
+  canonicalPath={'/compounds/' + entry.id + '/'}
+  lastReviewed={entry.data.lastReviewed}
+  references={entry.data.references}
+  participants={entry.data.participants}
+  headings={headings.filter((h) => h.depth === 2)}
+  recommendedProduct={entry.data.recommendedProduct}
+>
+  <Content />
+</CompoundLayout>

@@ -1,0 +1,100 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ThermalScale from '../components/ThermalScale.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+
+const [understand, protocols, compounds, gear, fieldNotes] = await Promise.all([
+  getCollection('understand'),
+  getCollection('protocols'),
+  getCollection('compounds'),
+  getCollection('gear'),
+  getCollection('field-notes'),
+]);
+
+const pillars = [
+  {
+    label: 'Understand',
+    href: '/understand/',
+    description: 'Mechanism, not advice. How the body loses heat to fall asleep and what the data shows.',
+    count: understand.filter((e) => !e.data.draft).length,
+  },
+  {
+    label: 'Protocols',
+    href: '/protocols/',
+    description: 'Ordered steps, no product, no affiliate — derived directly from the mechanism.',
+    count: protocols.filter((e) => !e.data.draft).length,
+  },
+  {
+    label: 'Compounds',
+    href: '/compounds/',
+    description: 'What enters the body that affects thermoregulation. Mechanism, evidence, dosage.',
+    count: compounds.filter((e) => !e.data.draft).length,
+  },
+  {
+    label: 'Gear',
+    href: '/gear/',
+    description: 'Hardware that controls the ambient environment. Verdict and price before the affiliate link.',
+    count: gear.filter((e) => e.data.reviewed).length,
+  },
+  {
+    label: 'Field Notes',
+    href: '/field-notes/',
+    description: 'N=1 experiments run in my own bedroom. Raw data included.',
+    count: fieldNotes.filter((e) => e.data.dataAvailable).length,
+  },
+];
+
+const featured = understand.find((e) => e.id === 'sleep-temperature' && !e.data.draft);
+---
+<Base title="The engineering of sleep" description="Sleep is a heat-transfer problem before it is a discipline problem. Mechanism, evidence and hardware for thermoregulated sleep — written by a production engineer, not a physician." canonicalPath="/">
+  <main class="ls-shell">
+    <section style="padding: 88px 0 56px; max-width: 900px;">
+      <div class="ls-kicker" style="margin-bottom: 24px;">The engineering of sleep</div>
+      <h1 style="font-family: var(--font-heading); font-weight: 600; font-size: 58px; line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 28px;">Sleep is a heat-transfer problem before it is a discipline problem.</h1>
+      <p style="font-size: 20px; line-height: 1.6; max-width: 62ch; margin: 0 0 40px;" class="ls-muted">Sleep onset is gated by a measurable drop in core body temperature — not willpower, not darkness, not a bedtime routine. LongevityStack applies an engineering lens, the same one used on a factory floor, to the room, the compounds and the protocol that move that number: mechanism first, evidence graded inline, hardware verdicts before the affiliate link.</p>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px;">
+        <a href="/understand/sleep-temperature/" class="btn btn-primary" style="text-decoration: none;">Read the mechanism</a>
+        <a href="/protocols/sleep-temperature/" class="btn btn-secondary" style="text-decoration: none;">See the protocol</a>
+      </div>
+      <div style="max-width: 420px;">
+        <ThermalScale />
+      </div>
+    </section>
+
+    <section style="padding: 56px 0 88px; border-top: 1px solid var(--color-divider);">
+      <div class="ls-kicker" style="margin-bottom: 24px;">Five pillars</div>
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px;">
+        {pillars.map((p) => (
+          <a href={p.href} style="text-decoration: none; color: inherit; border-top: 2px solid var(--color-text); padding-top: 18px; display: block;">
+            <div style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; line-height: 1.2; margin-bottom: 10px;">{p.label}</div>
+            <p style="margin: 0 0 16px; font-size: 14px; line-height: 1.5;" class="ls-muted">{p.description}</p>
+            <span style="font-size: 13px;" class="ls-muted ls-tabular">{p.count} live</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {featured && (
+      <section style="padding: 56px 0 88px; border-top: 1px solid var(--color-divider);">
+        <div class="ls-kicker" style="margin-bottom: 24px;">Currently live</div>
+        <a href={'/understand/' + featured.id + '/'} style="text-decoration: none; color: inherit; display: block; border-top: 2px solid var(--color-text); padding-top: 24px; max-width: 640px;">
+          <div style="font-family: var(--font-heading); font-size: 30px; font-weight: 600; margin-bottom: 12px;">{featured.data.title}</div>
+          <p style="font-size: 17px; line-height: 1.6; margin: 0 0 16px;" class="ls-muted">{featured.data.description}</p>
+          <div style="font-size: 13px;" class="ls-muted ls-tabular">
+            {featured.data.references} references
+            {featured.data.participants !== undefined && <> &middot; {featured.data.participants.toLocaleString('en-US')} participants</>}
+            {featured.data.lastReviewed && <> &middot; reviewed {featured.data.lastReviewed.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</>}
+          </div>
+        </a>
+      </section>
+    )}
+
+    <section id="subscribe" style="padding: 64px 0 96px; border-top: 1px solid var(--color-divider); max-width: 560px;">
+      <div class="ls-kicker" style="margin-bottom: 16px;">Newsletter</div>
+      <h2 style="margin: 0 0 12px;">One field note a month, no sponsored placements.</h2>
+      <p style="font-size: 16px; line-height: 1.6; margin: 0 0 24px;" class="ls-muted">Raw N=1 data from my own bedroom, plus new mechanism and protocol pages as they clear review.</p>
+      <NewsletterForm />
+    </section>
+  </main>
+</Base>

@@ -1,0 +1,17 @@
+---
+// Brevo (Sendinblue) list form. Replace REPLACE_WITH_BREVO_LIST_ID and the
+// form action with the real embed code from the Brevo dashboard — this
+// markup mirrors the fields Brevo's default form emits so the swap is drop-in.
+interface Props { subscriberCount?: number; }
+const { subscriberCount } = Astro.props as Props;
+---
+<form action="https://YOUR_BREVO_ACCOUNT.sibforms.com/serve/REPLACE_WITH_FORM_ID" method="post" id="ls-newsletter-form">
+  <div style="display: flex; gap: 10px; align-items: stretch; margin-bottom: 12px;">
+    <input class="input" type="email" name="EMAIL" required placeholder="you@domain.com" style="flex: 1;" />
+    <input type="hidden" name="list_id" value="REPLACE_WITH_BREVO_LIST_ID" />
+    <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Subscribe</button>
+  </div>
+  {subscriberCount !== undefined && (
+    <div style="font-size: 13px;" class="ls-muted ls-tabular">{subscriberCount.toLocaleString('en-US')} subscribers · unsubscribe in one click</div>
+  )}
+</form>
